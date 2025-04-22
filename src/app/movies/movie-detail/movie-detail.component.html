@@ -1,0 +1,56 @@
+<div *ngIf="movie" class="movie-detail-container">
+  <h1>{{ movie.title }}</h1>
+  <div class="detail-header">
+      <img [src]="getPosterUrl(movie.poster_Path)" alt="{{ movie.title }}" class="poster" />
+      <div class="info">
+          <p><strong>Release:</strong> {{ movie.release_Date }}</p>
+          <p><strong>Runtime:</strong> {{ movie.runtime }} min</p>
+          <p><strong>Genres:</strong> {{ getGenreNames() }}</p>
+          <p class="overview">{{ movie.overview }}</p>
+      </div>
+  </div>
+
+  <div class="sections">
+      <section>
+          <h2>Cast</h2>
+          <div class="cast-list">
+              <div *ngFor="let actor of movie.cast" class="actor-card">
+                  <img [src]="getProfileUrl(actor.profilePath)" [alt]="actor.name" />
+                  <p>{{ actor.name }} <br /><small>as {{ actor.character }}</small></p>
+              </div>
+          </div>
+      </section>
+
+      <section>
+          <h2>Image Gallery</h2>
+          <div class="gallery">
+              <img *ngFor="let image of movie.imageGallery; let i = index" [src]="getImageUrl(image)" class="gallery-image" [alt]="'Gallery ' + (i + 1) + ' for ' + movie?.title"/>
+          </div>
+      </section>
+
+      <section class="comments-section" *ngIf="isLoggedIn">
+          <h2>Comments</h2>
+          <div class="comment-form">
+              <textarea
+                  [value]="newComment"
+                  (input)="newComment = $any($event.target).value"
+                  rows="3"
+                  placeholder="Write a comment..."
+              ></textarea>
+              <button (click)="submitComment()" [disabled]="!newComment.trim()">Post Comment</button>
+          </div>
+          <div class="comments-list" *ngIf="comments.length > 0">
+              <div *ngFor="let comment of comments" class="comment">
+                  <p>{{ comment.content }}</p>
+                  <small>{{ comment.createdAt | date:'short' }}</small>
+              </div>
+          </div>
+          <div *ngIf="comments.length === 0 && isLoggedIn">
+              <p>No comments yet. Be the first to comment!</p>
+          </div>
+          <div *ngIf="!isLoggedIn">
+              <p><em>You must be logged in to post comments.</em></p>
+          </div>
+      </section>
+  </div>
+</div>

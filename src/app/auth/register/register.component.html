@@ -1,0 +1,67 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <h2 class="auth-title">Create Account</h2>
+    <p class="auth-subtitle">Join us today to get started</p>
+    
+    <!-- Error message display -->
+    <div *ngIf="errorMessage" class="alert alert-danger">
+      {{ errorMessage }}
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="register()" class="auth-form">
+      <div class="form-group">
+        <label for="reg-username" class="form-label">Username</label>
+        <input 
+          type="text" 
+          id="reg-username" 
+          formControlName="username" 
+          class="form-control"
+          [class.is-invalid]="username?.invalid && (username?.dirty || username?.touched || formSubmitted)"
+          placeholder="Choose a username"
+        >
+        <div *ngIf="username?.invalid && (username?.dirty || username?.touched || formSubmitted)" class="invalid-feedback">
+          Username is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email" class="form-label">Email</label>
+        <input 
+          type="email" 
+          id="email" 
+          formControlName="email" 
+          class="form-control"
+          [class.is-invalid]="email?.invalid && (email?.dirty || email?.touched || formSubmitted)"
+          placeholder="Enter your email"
+        >
+        <div *ngIf="email?.invalid && (email?.dirty || email?.touched || formSubmitted)" class="invalid-feedback">
+          Valid email is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="reg-password" class="form-label">Password</label>
+        <input 
+          type="password" 
+          id="reg-password" 
+          formControlName="password" 
+          class="form-control"
+          [class.is-invalid]="password?.invalid && (password?.dirty || password?.touched || formSubmitted)"
+          placeholder="Create a password"
+        >
+        <div *ngIf="password?.invalid && (password?.dirty || password?.touched || formSubmitted)" class="invalid-feedback">
+          Password must be at least 6 characters
+        </div>
+      </div>
+
+      <button type="submit" class="auth-button" [disabled]="registerForm.invalid || isLoading">
+        <span *ngIf="!isLoading">Register</span>
+        <span *ngIf="isLoading" class="spinner"></span>
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      <p>Already have an account? <a routerLink="/login" class="auth-link">Login here</a></p>
+    </div>
+  </div>
+</div>

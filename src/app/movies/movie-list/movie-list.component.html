@@ -1,0 +1,63 @@
+<!-- Search Section -->
+<div class="search-section">
+  <div class="search-controls">
+    <input 
+      type="text" 
+      [(ngModel)]="searchTitle" 
+      placeholder="Search by title..."
+      (keyup.enter)="search()"
+    >
+    <button (click)="search()">Search</button>
+    <button 
+      *ngIf="searchTitle || selectedGenres.length" 
+      (click)="clearFilters()"
+      class="clear-btn"
+    >Clear
+    </button>
+  </div>
+  
+  <div class="genre-filter">
+    <button (click)="showGenreDropdown = !showGenreDropdown">
+      {{ selectedGenres.length ? getGenreNames(selectedGenres) : 'Filter by Genre' }}
+    </button>
+    
+    <div class="genre-dropdown" *ngIf="showGenreDropdown">
+      <div 
+        *ngFor="let genre of genreList" 
+        class="genre-option"
+        [class.selected]="selectedGenres.includes(genre.id)"
+        (click)="toggleGenre(genre.id)"
+      >
+        {{ genre.name }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- View Toggle Buttons -->
+<div class="toggle-buttons">
+  <button (click)="toggleView('top-rated')" [disabled]="viewMode === 'top-rated'">Top Rated</button>
+  <button (click)="toggleView('latest')" [disabled]="viewMode === 'latest'">Latest</button>
+</div>
+
+<!-- Movie List -->
+<div *ngFor="let movie of movies" class="movie-card" [routerLink]="['/movie', movie.id]">
+  <img
+    [src]="'https://image.tmdb.org/t/p/w780' + movie.backdrop_Path"
+    alt="{{ movie.title }}"
+    class="movie-backdrop"
+  />
+  <div class="movie-details">
+    <h2>{{ movie.title }} ({{ getReleaseYear(movie.release_Date) }})</h2>
+    <p><strong>Genres:</strong> {{ getGenreNames(movie.genre_Ids) }}</p>
+    <p><strong>Popularity:</strong> {{ movie.popularity }}</p>
+    <p>{{ movie.overview }}</p>
+  </div>
+</div>
+
+<!-- Pagination Controls -->
+<div class="pagination-controls">
+  <button (click)="prevPage()" [disabled]="currentPage === 1">Previous</button>
+  <span>Page {{ currentPage }} of {{ totalPages }}</span>
+  <button (click)="nextPage()" [disabled]="currentPage === totalPages">Next</button>
+</div>
